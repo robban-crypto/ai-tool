@@ -2,45 +2,66 @@
 <html>
 <head>
 
-<title>AI Creator Toolkit</title>
+<title>AI Social Media Toolkit</title>
 
 <style>
 
 body{
-font-family: Arial, sans-serif;
-background:#f6f7fb;
+font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+background:linear-gradient(180deg,#0f1221,#1b1f3b);
 margin:0;
+color:white;
 }
 
 .container{
 max-width:900px;
 margin:auto;
-padding:40px;
+padding:60px 30px;
+}
+
+.logo{
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo img{
+width:90px;
 }
 
 h1{
 text-align:center;
+margin:10px 0;
+font-size:34px;
 }
 
 .subtitle{
 text-align:center;
-color:#666;
+color:#b6b9ff;
 margin-bottom:40px;
+}
+
+.card{
+background:#ffffff;
+border-radius:12px;
+padding:30px;
+box-shadow:0 20px 40px rgba(0,0,0,0.35);
 }
 
 .tool-selector{
 display:flex;
 gap:10px;
 margin-bottom:20px;
+flex-wrap:wrap;
 }
 
 .tool-selector button{
 flex:1;
 padding:10px;
 border:none;
-background:#e4e7ff;
+background:#eef0ff;
 cursor:pointer;
 border-radius:6px;
+font-weight:600;
 }
 
 .tool-selector button.active{
@@ -53,29 +74,42 @@ width:100%;
 height:180px;
 padding:12px;
 font-size:16px;
-border-radius:6px;
+border-radius:8px;
 border:1px solid #ddd;
 }
 
 .generate-btn{
 margin-top:15px;
-padding:12px;
+padding:14px;
 width:100%;
 background:#5a67ff;
 color:white;
 border:none;
-border-radius:6px;
+border-radius:8px;
 font-size:16px;
 cursor:pointer;
+font-weight:600;
+}
+
+.generate-btn:hover{
+background:#4854ff;
 }
 
 .result{
 margin-top:30px;
-background:white;
+background:#f6f7fb;
 padding:20px;
 border-radius:8px;
 white-space:pre-wrap;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+color:#111;
+min-height:120px;
+}
+
+.footer{
+margin-top:40px;
+text-align:center;
+color:#888cff;
+font-size:14px;
 }
 
 </style>
@@ -86,8 +120,17 @@ box-shadow:0 2px 6px rgba(0,0,0,0.1);
 
 <div class="container">
 
-<h1>AI Creator Toolkit</h1>
-<p class="subtitle">Turn one piece of content into multiple social media assets instantly.</p>
+<div class="logo">
+<img src="https://i.imgur.com/7xY9F5W.png">
+</div>
+
+<h1>AI Social Media Toolkit</h1>
+
+<p class="subtitle">
+Turn one piece of content into multiple social media assets instantly.
+</p>
+
+<div class="card">
 
 <div class="tool-selector">
 
@@ -103,6 +146,12 @@ box-shadow:0 2px 6px rgba(0,0,0,0.1);
 <button class="generate-btn" onclick="generate()">Generate</button>
 
 <div class="result" id="result"></div>
+
+</div>
+
+<div class="footer">
+Powered by DadStrength AI
+</div>
 
 </div>
 
@@ -136,7 +185,7 @@ result.innerText="⏳ Generating..."
 
 try{
 
-const response = await fetch("YOUR_WEBHOOK_URL",{
+const response = await fetch("http://89.167.81.155:5678/webhook/generate",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
