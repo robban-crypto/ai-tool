@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Content Repurposer</title>
+</head>
+
+<body>
+
+<h2>AI Content Repurposer</h2>
+
+<textarea id="content" rows="10" cols="60" placeholder="Paste your article or text here"></textarea>
+
+<br><br>
+
+<button onclick="generate()">Generate Content</button>
+
+<pre id="result"></pre>
+
+<script>
+
+async function generate() {
+
+const content = document.getElementById("content").value;
+
+const response = await fetch("PASTE_YOUR_N8N_WEBHOOK_URL_HERE", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ content })
+});
+
+const data = await response.json();
+
+document.getElementById("result").innerText = data.output;
+
+}
+
+</script>
+
+</body>
+</html>
