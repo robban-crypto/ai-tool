@@ -167,11 +167,9 @@ font-size:14px;
 
 <body>
 
-
 <div class="hero">
 <img src="hero.png" alt="AI Social Media Toolkit">
 </div>
-
 
 <div class="container">
 
@@ -207,7 +205,6 @@ FlowForge
 
 </div>
 
-
 <script>
 
 let tool = "repurpose"
@@ -224,21 +221,17 @@ document.getElementById(selected).classList.add("active")
 
 }
 
-
 /* COPY RESULT */
 
 function copyResult(){
 
 const text = document.getElementById("result").textContent
 
-if(!text){
-return
-}
+if(!text) return
 
 navigator.clipboard.writeText(text)
 
 }
-
 
 /* AI TYPING EFFECT */
 
@@ -268,7 +261,6 @@ typing()
 
 }
 
-
 /* GENERATE */
 
 async function generate(){
@@ -276,6 +268,7 @@ async function generate(){
 const content = document.getElementById("content").value
 const apikey = document.getElementById("apikey").value
 const result = document.getElementById("result")
+const button = document.querySelector(".generate-btn")
 
 if(!apikey){
 result.innerText="Please enter your API key."
@@ -286,6 +279,8 @@ if(!content){
 result.innerText="Please paste content first."
 return
 }
+
+button.disabled = true
 
 result.innerText="⚡ AI thinking..."
 
@@ -318,6 +313,8 @@ typeWriter(data)
 result.innerText="Error connecting to AI"
 
 }
+
+button.disabled = false
 
 }
 
