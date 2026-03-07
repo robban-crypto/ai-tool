@@ -142,8 +142,6 @@ border-radius:8px;
 white-space:pre-wrap;
 min-height:120px;
 font-family:monospace;
-max-height:400px;
-overflow-y:auto;
 }
 
 /* FOOTER */
@@ -233,7 +231,7 @@ btn.classList.remove("copied")
 
 }
 
-/* TYPEWRITER + AUTOSCROLL */
+/* TYPEWRITER + PAGE AUTOSCROLL */
 
 function typeWriter(text){
 
@@ -249,11 +247,14 @@ if(i<text.length){
 
 result.innerText+=text.charAt(i)
 
-result.scrollTop=result.scrollHeight
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+})
 
 i++
 
-setTimeout(typing,10)
+setTimeout(typing,8)
 
 }
 
