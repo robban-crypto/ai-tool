@@ -54,18 +54,44 @@ box-shadow:0 30px 70px rgba(0,0,0,0.5);
 margin-top:-40px;
 }
 
-/* INPUT */
+/* API KEY FIELD */
 
 .api-key{
 margin-bottom:20px;
 }
 
-.api-key input{
+.api-label{
+font-size:13px;
+color:#9aa0ff;
+margin-bottom:6px;
+display:block;
+}
+
+.api-input-wrapper{
+position:relative;
+}
+
+.api-input-wrapper input{
 width:100%;
 padding:14px;
 border-radius:8px;
 border:none;
 font-size:15px;
+padding-right:70px;
+}
+
+.toggle-key{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+background:#5a67ff;
+border:none;
+color:white;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+font-size:12px;
 }
 
 /* TOOL SELECTOR */
@@ -176,7 +202,22 @@ font-size:14px;
 <div class="card">
 
 <div class="api-key">
-<input id="apikey" placeholder="Enter your API key (required)">
+
+<span class="api-label">🔑 API Key</span>
+
+<div class="api-input-wrapper">
+
+<input 
+id="apikey" 
+type="password" 
+placeholder="Enter your API key"
+autocomplete="off"
+>
+
+<button class="toggle-key" onclick="toggleKey()">Show</button>
+
+</div>
+
 </div>
 
 <div class="tool-selector">
@@ -208,6 +249,8 @@ FlowForge AI
 
 let tool = "repurpose"
 
+/* TOOL SELECTOR */
+
 function setTool(selected){
 
 tool = selected
@@ -220,7 +263,24 @@ document.getElementById(selected).classList.add("active")
 
 }
 
-/* COPY */
+/* SHOW/HIDE API KEY */
+
+function toggleKey(){
+
+const input = document.getElementById("apikey")
+const btn = document.querySelector(".toggle-key")
+
+if(input.type === "password"){
+input.type="text"
+btn.innerText="Hide"
+}else{
+input.type="password"
+btn.innerText="Show"
+}
+
+}
+
+/* COPY RESULT */
 
 function copyResult(){
 
