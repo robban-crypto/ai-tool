@@ -290,6 +290,37 @@ URL.revokeObjectURL(url)
 }
 
 
+/* TYPE WRITER EFFECT */
+
+function typeWriter(text){
+
+const result=document.getElementById("result")
+
+result.innerText=""
+
+let i=0
+
+function typing(){
+
+if(i<text.length){
+
+result.innerText+=text.charAt(i)
+
+i++
+
+result.scrollTop=result.scrollHeight
+
+setTimeout(typing,10)
+
+}
+
+}
+
+typing()
+
+}
+
+
 /* GENERATE */
 
 async function generate(){
@@ -332,7 +363,7 @@ apikey:apikey
 
 const data=await response.text()
 
-result.innerText=data
+typeWriter(data)
 
 window.scrollTo({
 top:document.body.scrollHeight,
