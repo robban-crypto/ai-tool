@@ -77,7 +77,8 @@ result.innerText = data.output;
 
 }catch(error){
 
-result.innerText = "❌ Error connecting to AI service.";
+console.error(error);
+result.innerText = "❌ Error: " + error.message;
 
 }
 
@@ -90,3 +91,4 @@ button.innerText = "Generate Content";
 
 </body>
 </html>
+
