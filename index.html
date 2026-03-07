@@ -101,7 +101,7 @@ resize:vertical;
 font-size:15px;
 }
 
-/* BUTTON */
+/* GENERATE BUTTON */
 
 .generate-btn{
 margin-top:15px;
@@ -125,26 +125,29 @@ padding:20px;
 border-radius:8px;
 white-space:pre-wrap;
 min-height:120px;
-position:relative;
 font-family:monospace;
 }
 
-/* COPY BUTTON */
+/* ACTION BUTTONS */
 
-.copy-btn{
-position:absolute;
-top:10px;
-right:10px;
-background:#5a67ff;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-color:white;
-cursor:pointer;
-font-size:12px;
+.actions{
+margin-top:10px;
+display:flex;
+gap:10px;
 }
 
-.copy-btn.copied{
+.actions button{
+background:#5a67ff;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+font-size:14px;
+font-weight:600;
+}
+
+.actions button.copied{
 background:#2ecc71;
 }
 
@@ -182,7 +185,7 @@ font-size:14px;
 
 
 <div class="hero">
-<img src="hero.png" alt="AI Social Media Toolkit">
+<img src="hero.png" alt="FlowForge AI Toolkit">
 </div>
 
 
@@ -207,10 +210,11 @@ font-size:14px;
 
 <button class="generate-btn" onclick="generate()">Generate</button>
 
-<div class="result" id="result">
+<div class="result" id="result"></div>
 
-<button class="copy-btn" onclick="copyResult()">Copy</button>
-
+<div class="actions">
+<button onclick="copyResult()">Copy</button>
+<button onclick="downloadResult()">Download</button>
 </div>
 
 </div>
@@ -247,7 +251,7 @@ const text=document.getElementById("result").innerText
 
 navigator.clipboard.writeText(text)
 
-const btn=document.querySelector(".copy-btn")
+const btn=document.querySelector(".actions button")
 
 btn.innerText="Copied ✓"
 btn.classList.add("copied")
@@ -256,6 +260,32 @@ setTimeout(()=>{
 btn.innerText="Copy"
 btn.classList.remove("copied")
 },2000)
+
+}
+
+
+/* DOWNLOAD RESULT */
+
+function downloadResult(){
+
+const text=document.getElementById("result").innerText
+
+const blob=new Blob([text],{type:"text/plain"})
+
+const url=URL.createObjectURL(blob)
+
+const a=document.createElement("a")
+
+a.href=url
+a.download="flowforge-output.txt"
+
+document.body.appendChild(a)
+
+a.click()
+
+a.remove()
+
+URL.revokeObjectURL(url)
 
 }
 
@@ -302,7 +332,7 @@ apikey:apikey
 
 const data=await response.text()
 
-result.innerHTML='<button class="copy-btn" onclick="copyResult()">Copy</button>'+data
+result.innerText=data
 
 window.scrollTo({
 top:document.body.scrollHeight,
