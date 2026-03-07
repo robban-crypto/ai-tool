@@ -176,7 +176,7 @@ font-size:14px;
 <div class="card">
 
 <div class="api-key">
-<input id="apikey" type="password" placeholder="Enter your API key (required)">
+<input id="apikey" placeholder="Enter your API key (required)">
 </div>
 
 <div class="tool-selector">
@@ -192,15 +192,14 @@ font-size:14px;
 
 <button class="generate-btn" onclick="generate()">Generate</button>
 
-<div class="result">
+<div class="result" id="result">
 <button class="copy-btn" onclick="copyResult()">Copy</button>
-<div id="result"></div>
 </div>
 
 </div>
 
 <div class="footer">
-FlowForge
+FlowForge AI
 </div>
 
 </div>
@@ -221,14 +220,11 @@ document.getElementById(selected).classList.add("active")
 
 }
 
-/* COPY RESULT */
+/* COPY */
 
 function copyResult(){
 
-const text = document.getElementById("result").textContent
-
-if(!text) return
-
+const text = document.getElementById("result").innerText
 navigator.clipboard.writeText(text)
 
 }
@@ -238,7 +234,6 @@ navigator.clipboard.writeText(text)
 function typeWriter(text){
 
 const result = document.getElementById("result")
-
 result.innerText=""
 
 let i = 0
@@ -251,7 +246,7 @@ result.innerText += text.charAt(i)
 
 i++
 
-setTimeout(typing,15)
+setTimeout(typing,10)
 
 }
 
@@ -268,7 +263,6 @@ async function generate(){
 const content = document.getElementById("content").value
 const apikey = document.getElementById("apikey").value
 const result = document.getElementById("result")
-const button = document.querySelector(".generate-btn")
 
 if(!apikey){
 result.innerText="Please enter your API key."
@@ -280,13 +274,11 @@ result.innerText="Please paste content first."
 return
 }
 
-button.disabled = true
-
 result.innerText="⚡ AI thinking..."
 
 try{
 
-const response = await fetch("https://launches-rap-drugs-structured.trycloudflare.com/webhook/generate",{
+const response = await fetch("https://api.flowforgeai.app/webhook/generate",{
 
 method:"POST",
 
@@ -304,17 +296,24 @@ apikey:apikey
 
 })
 
+if(!response.ok){
+throw new Error("Server error")
+}
+
 const data = await response.text()
+
+if(!data){
+result.innerText="No response from AI."
+return
+}
 
 typeWriter(data)
 
 }catch(err){
 
-result.innerText="Error connecting to AI"
+result.innerText="Error connecting to AI server."
 
 }
-
-button.disabled = false
 
 }
 
@@ -322,6 +321,3 @@ button.disabled = false
 
 </body>
 </html>
-
-
-
