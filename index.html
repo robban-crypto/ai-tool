@@ -73,9 +73,7 @@ body: JSON.stringify({ content })
 
 const data = await response.text();
 
-const parsed = JSON.parse(data);
-
-result.innerText = parsed.output;
+result.innerText = data;
 
 }catch(error){
 
