@@ -11,15 +11,17 @@
 *{box-sizing:border-box;}
 
 body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 margin:0;
 background:#0f1221;
 color:white;
 }
 
+/* HERO */
+
 .hero{
 max-width:1100px;
-margin:20px auto;
+margin:20px auto 10px auto;
 padding:0 20px;
 }
 
@@ -29,11 +31,15 @@ border-radius:16px;
 box-shadow:0 30px 60px rgba(0,0,0,0.5);
 }
 
+/* CONTAINER */
+
 .container{
 max-width:950px;
 margin:auto;
 padding:20px;
 }
+
+/* CARD */
 
 .card{
 background:rgba(255,255,255,0.07);
@@ -44,6 +50,8 @@ box-shadow:0 30px 70px rgba(0,0,0,0.5);
 margin-top:-40px;
 }
 
+/* INPUT */
+
 .api-key input{
 width:100%;
 padding:14px;
@@ -52,6 +60,8 @@ border:none;
 font-size:15px;
 margin-bottom:20px;
 }
+
+/* TOOL SELECTOR */
 
 .tool-selector{
 display:flex;
@@ -75,6 +85,8 @@ font-weight:600;
 background:#5a67ff;
 }
 
+/* TEXTAREA */
+
 textarea{
 width:100%;
 height:180px;
@@ -84,6 +96,8 @@ border:none;
 resize:vertical;
 font-size:15px;
 }
+
+/* BUTTON */
 
 .generate-btn{
 margin-top:15px;
@@ -98,28 +112,32 @@ cursor:pointer;
 font-weight:600;
 }
 
-/* RESULT SECTIONS */
+/* RESULTS */
+
+#results{
+margin-top:30px;
+}
+
+/* SECTION CARD */
 
 .section{
-margin-top:20px;
 background:#11142a;
 padding:20px;
 border-radius:10px;
-}
-
-.section-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
+margin-bottom:20px;
+position:relative;
 }
 
 .section-title{
 font-weight:700;
+margin-bottom:10px;
 color:#8c90ff;
 }
 
 .copy-btn{
+position:absolute;
+top:15px;
+right:15px;
 background:#5a67ff;
 border:none;
 padding:6px 12px;
@@ -130,14 +148,30 @@ font-size:12px;
 }
 
 .copy-btn.copied{
-background:#22c55e;
+background:#2ecc71;
+}
+
+/* LOADER */
+
+.loader{
+border:4px solid rgba(255,255,255,0.1);
+border-top:4px solid #5a67ff;
+border-radius:50%;
+width:40px;
+height:40px;
+animation:spin 1s linear infinite;
+margin:40px auto;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
 }
 
 .footer{
 margin-top:40px;
 text-align:center;
 color:#8c90ff;
-font-size:14px;
 }
 
 </style>
@@ -146,9 +180,11 @@ font-size:14px;
 
 <body>
 
+
 <div class="hero">
 <img src="hero.png">
 </div>
+
 
 <div class="container">
 
@@ -176,10 +212,11 @@ font-size:14px;
 </div>
 
 <div class="footer">
-FlowForge
+FlowForge AI
 </div>
 
 </div>
+
 
 <script>
 
@@ -197,29 +234,16 @@ document.getElementById(selected).classList.add("active")
 
 }
 
-/* COPY BUTTON */
 
-function copyText(text,button){
-
-navigator.clipboard.writeText(text)
-
-button.innerText="Copied ✓"
-button.classList.add("copied")
-
-setTimeout(()=>{
-button.innerText="Copy"
-button.classList.remove("copied")
-},2000)
-
-}
-
-/* SPLIT AI OUTPUT */
+/* RENDER AI SECTIONS */
 
 function renderSections(text){
 
 const container=document.getElementById("results")
 
 container.innerHTML=""
+
+text=text.replace(/## /g,"")
 
 const titles=[
 "X THREAD",
@@ -230,13 +254,14 @@ const titles=[
 ]
 
 let sections=[]
-
 let currentTitle=""
 let currentContent=[]
 
 text.split("\n").forEach(line=>{
 
-if(titles.includes(line.trim())){
+const clean=line.trim()
+
+if(titles.includes(clean)){
 
 if(currentTitle){
 sections.push({
@@ -245,7 +270,7 @@ content:currentContent.join("\n")
 })
 }
 
-currentTitle=line.trim()
+currentTitle=clean
 currentContent=[]
 
 }else{
@@ -266,23 +291,29 @@ content:currentContent.join("\n")
 sections.forEach(sec=>{
 
 const div=document.createElement("div")
-
 div.className="section"
 
 div.innerHTML=`
 
-<div class="section-header">
 <div class="section-title">${sec.title}</div>
 <button class="copy-btn">Copy</button>
-</div>
-
 <div>${sec.content.replace(/\n/g,"<br>")}</div>
 
 `
 
 const btn=div.querySelector(".copy-btn")
 
-btn.onclick=()=>copyText(sec.content,btn)
+btn.onclick=()=>{
+navigator.clipboard.writeText(sec.content)
+
+btn.innerText="Copied ✓"
+btn.classList.add("copied")
+
+setTimeout(()=>{
+btn.innerText="Copy"
+btn.classList.remove("copied")
+},2000)
+}
 
 container.appendChild(div)
 
@@ -295,6 +326,7 @@ behavior:"smooth"
 
 }
 
+
 /* GENERATE */
 
 async function generate(){
@@ -304,16 +336,16 @@ const apikey=document.getElementById("apikey").value
 const results=document.getElementById("results")
 
 if(!apikey){
-results.innerHTML="Enter API key"
+alert("Enter API key")
 return
 }
 
 if(!content){
-results.innerHTML="Enter content"
+alert("Enter content")
 return
 }
 
-results.innerHTML="⚡ AI thinking..."
+results.innerHTML=`<div class="loader"></div>`
 
 try{
 
@@ -339,7 +371,7 @@ renderSections(data)
 
 }catch(err){
 
-results.innerHTML="Error connecting to AI"
+results.innerHTML="Connection error"
 
 }
 
