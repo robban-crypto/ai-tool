@@ -126,8 +126,6 @@ border-radius:8px;
 white-space:pre-wrap;
 min-height:120px;
 font-family:monospace;
-overflow-y:auto;
-max-height:500px;
 }
 
 /* ACTION BUTTONS */
@@ -233,8 +231,6 @@ FlowForge AI
 let tool="repurpose"
 
 
-/* TOOL SWITCH */
-
 function setTool(selected){
 
 tool=selected
@@ -248,7 +244,7 @@ document.getElementById(selected).classList.add("active")
 }
 
 
-/* COPY RESULT */
+/* COPY */
 
 function copyResult(){
 
@@ -269,7 +265,7 @@ btn.classList.remove("copied")
 }
 
 
-/* DOWNLOAD RESULT */
+/* DOWNLOAD */
 
 function downloadResult(){
 
@@ -295,7 +291,7 @@ URL.revokeObjectURL(url)
 }
 
 
-/* TYPE WRITER */
+/* TYPEWRITER */
 
 function typeWriter(text){
 
@@ -313,7 +309,7 @@ result.innerText+=text.charAt(i)
 
 i++
 
-result.scrollTop=result.scrollHeight
+window.scrollTo(0,document.body.scrollHeight)
 
 setTimeout(typing,8)
 
@@ -370,12 +366,12 @@ typeWriter(data)
 
 setTimeout(()=>{
 
-result.scrollIntoView({
-behavior:"smooth",
-block:"start"
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
 })
 
-},100)
+},200)
 
 }catch(err){
 
