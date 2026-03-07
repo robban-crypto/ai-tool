@@ -22,15 +22,15 @@ async function generate() {
 
 const content = document.getElementById("content").value;
 
-const response = await fetch("PASTE_YOUR_N8N_WEBHOOK_URL_HERE", {
+const response = await fetch("http://89.167.81.155:5678/webhook-test/generate", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({ content })
 });
 
-const data = await response.json();
+const data = await response.text();
 
-document.getElementById("result").innerText = data.output;
+document.getElementById("result").innerText = data;
 
 }
 
