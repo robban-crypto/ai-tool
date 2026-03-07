@@ -178,7 +178,7 @@ font-size:14px;
 <div class="card">
 
 <div class="api-key">
-<input id="apikey" placeholder="Enter your API key (required)">
+<input id="apikey" type="password" placeholder="Enter your API key (required)">
 </div>
 
 <div class="tool-selector">
@@ -194,8 +194,9 @@ font-size:14px;
 
 <button class="generate-btn" onclick="generate()">Generate</button>
 
-<div class="result" id="result">
+<div class="result">
 <button class="copy-btn" onclick="copyResult()">Copy</button>
+<div id="result"></div>
 </div>
 
 </div>
@@ -224,11 +225,16 @@ document.getElementById(selected).classList.add("active")
 }
 
 
-/* COPY */
+/* COPY RESULT */
 
 function copyResult(){
 
-const text = document.getElementById("result").innerText
+const text = document.getElementById("result").textContent
+
+if(!text){
+return
+}
+
 navigator.clipboard.writeText(text)
 
 }
@@ -239,6 +245,7 @@ navigator.clipboard.writeText(text)
 function typeWriter(text){
 
 const result = document.getElementById("result")
+
 result.innerText=""
 
 let i = 0
@@ -318,4 +325,3 @@ result.innerText="Error connecting to AI"
 
 </body>
 </html>
-
