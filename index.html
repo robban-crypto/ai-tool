@@ -22,7 +22,7 @@ async function generate() {
 
 const content = document.getElementById("content").value;
 
-const response = await fetch("http://89.167.81.155:5678/webhook-test/generate", {
+const response = await fetch("https://parts-excess-suse-somewhat.trycloudflare.com/webhook-test/generate", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({ content })
