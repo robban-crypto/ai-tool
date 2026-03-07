@@ -19,8 +19,6 @@ background:#0f1221;
 color:white;
 }
 
-/* HERO */
-
 .hero{
 max-width:1100px;
 margin:20px auto 10px auto;
@@ -33,15 +31,11 @@ border-radius:16px;
 box-shadow:0 30px 60px rgba(0,0,0,0.5);
 }
 
-/* CONTAINER */
-
 .container{
 max-width:950px;
 margin:auto;
 padding:20px;
 }
-
-/* CARD */
 
 .card{
 background:rgba(255,255,255,0.07);
@@ -52,8 +46,6 @@ box-shadow:0 30px 70px rgba(0,0,0,0.5);
 margin-top:-40px;
 }
 
-/* INPUT */
-
 .api-key input{
 width:100%;
 padding:14px;
@@ -62,8 +54,6 @@ border:none;
 font-size:15px;
 margin-bottom:20px;
 }
-
-/* TOOL SELECTOR */
 
 .tool-selector{
 display:flex;
@@ -87,8 +77,6 @@ font-weight:600;
 background:#5a67ff;
 }
 
-/* TEXTAREA */
-
 textarea{
 width:100%;
 height:180px;
@@ -98,8 +86,6 @@ border:none;
 resize:vertical;
 font-size:15px;
 }
-
-/* GENERATE BUTTON */
 
 .generate-btn{
 margin-top:15px;
@@ -114,37 +100,29 @@ cursor:pointer;
 font-weight:600;
 }
 
-/* COPY BUTTON */
+.section{
+margin-top:20px;
+background:#11142a;
+padding:20px;
+border-radius:10px;
+}
+
+.section-title{
+font-weight:700;
+margin-bottom:10px;
+color:#8c90ff;
+}
 
 .copy-btn{
-margin-top:20px;
+margin-top:10px;
 background:#5a67ff;
 border:none;
-padding:10px 16px;
+padding:6px 12px;
 border-radius:6px;
 color:white;
 cursor:pointer;
-font-size:14px;
-transition:0.2s;
+font-size:12px;
 }
-
-.copy-btn.copied{
-background:#22c55e;
-}
-
-/* RESULT */
-
-.result{
-margin-top:15px;
-background:#11142a;
-padding:20px;
-border-radius:8px;
-white-space:pre-wrap;
-min-height:120px;
-font-family:monospace;
-}
-
-/* FOOTER */
 
 .footer{
 margin-top:40px;
@@ -184,9 +162,7 @@ font-size:14px;
 
 <button class="generate-btn" onclick="generate()">Generate</button>
 
-<button class="copy-btn" id="copyBtn" onclick="copyResult()">Copy Result</button>
-
-<div class="result" id="result"></div>
+<div id="results"></div>
 
 </div>
 
@@ -212,77 +188,69 @@ document.getElementById(selected).classList.add("active")
 
 }
 
-/* COPY */
-
-function copyResult(){
-
-const text=document.getElementById("result").innerText
-const btn=document.getElementById("copyBtn")
+function copyText(text){
 
 navigator.clipboard.writeText(text)
 
-btn.innerText="Copied ✓"
-btn.classList.add("copied")
-
-setTimeout(()=>{
-btn.innerText="Copy Result"
-btn.classList.remove("copied")
-},2000)
-
 }
 
-/* TYPEWRITER + PAGE AUTOSCROLL */
+/* SPLIT AI RESULT INTO SECTIONS */
 
-function typeWriter(text){
+function renderSections(text){
 
-const result=document.getElementById("result")
+const container=document.getElementById("results")
 
-result.innerText=""
+container.innerHTML=""
 
-let i=0
+const sections=text.split("---------------------------------")
 
-function typing(){
+sections.forEach(section=>{
 
-if(i<text.length){
+section=section.trim()
 
-result.innerText+=text.charAt(i)
+if(section.length<5)return
 
-window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
+const title=section.split("\n")[0]
+
+const content=section.replace(title,"").trim()
+
+const div=document.createElement("div")
+
+div.className="section"
+
+div.innerHTML=`
+
+<div class="section-title">${title}</div>
+
+<div class="section-content">${content.replace(/\n/g,"<br>")}</div>
+
+<button class="copy-btn" onclick='copyText(\`${content}\`)'>Copy</button>
+
+`
+
+container.appendChild(div)
+
 })
 
-i++
-
-setTimeout(typing,8)
-
 }
-
-}
-
-typing()
-
-}
-
-/* GENERATE */
 
 async function generate(){
 
 const content=document.getElementById("content").value
 const apikey=document.getElementById("apikey").value
-const result=document.getElementById("result")
+const results=document.getElementById("results")
 
 if(!apikey){
-result.innerText="Please enter your API key."
+results.innerHTML="Enter API key"
 return
 }
 
 if(!content){
-result.innerText="Please paste content first."
+results.innerHTML="Enter content"
 return
 }
 
-result.innerText="⚡ AI thinking..."
+results.innerHTML="⚡ AI thinking..."
 
 try{
 
@@ -304,11 +272,11 @@ apikey:apikey
 
 const data=await response.text()
 
-typeWriter(data)
+renderSections(data)
 
 }catch(err){
 
-result.innerText="Error connecting to AI"
+results.innerHTML="Error connecting to AI"
 
 }
 
