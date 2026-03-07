@@ -126,6 +126,8 @@ border-radius:8px;
 white-space:pre-wrap;
 min-height:120px;
 font-family:monospace;
+overflow-y:auto;
+max-height:500px;
 }
 
 /* ACTION BUTTONS */
@@ -230,6 +232,9 @@ FlowForge AI
 
 let tool="repurpose"
 
+
+/* TOOL SWITCH */
+
 function setTool(selected){
 
 tool=selected
@@ -290,7 +295,7 @@ URL.revokeObjectURL(url)
 }
 
 
-/* TYPE WRITER EFFECT */
+/* TYPE WRITER */
 
 function typeWriter(text){
 
@@ -310,7 +315,7 @@ i++
 
 result.scrollTop=result.scrollHeight
 
-setTimeout(typing,10)
+setTimeout(typing,8)
 
 }
 
@@ -352,11 +357,9 @@ headers:{
 },
 
 body:JSON.stringify({
-
 content:content,
 tool:tool,
 apikey:apikey
-
 })
 
 })
@@ -365,10 +368,14 @@ const data=await response.text()
 
 typeWriter(data)
 
-window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
+setTimeout(()=>{
+
+result.scrollIntoView({
+behavior:"smooth",
+block:"start"
 })
+
+},100)
 
 }catch(err){
 
@@ -377,6 +384,27 @@ result.innerText="Connection error"
 }
 
 }
+
+
+/* ENTER TO GENERATE */
+
+document.addEventListener("keydown",function(e){
+
+if(e.key==="Enter" && !e.shiftKey){
+
+const textarea=document.getElementById("content")
+
+if(document.activeElement===textarea){
+
+e.preventDefault()
+
+generate()
+
+}
+
+}
+
+})
 
 </script>
 
