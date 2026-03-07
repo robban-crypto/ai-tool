@@ -73,7 +73,8 @@ body: JSON.stringify({ content })
 
 const data = await response.text();
 
-result.innerText = data;
+const parsed = JSON.parse(data);
+result.innerText = parsed.output;
 
 }catch(error){
 
@@ -91,3 +92,4 @@ button.innerText = "Generate Content";
 
 </body>
 </html>
+
