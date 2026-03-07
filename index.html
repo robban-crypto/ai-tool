@@ -15,25 +15,20 @@ background:#0f1221;
 color:white;
 }
 
-/* HERO */
+/* HERO IMAGE */
 
 .hero{
-background-image:url("hero.png");
-background-size:cover;
-background-position:center;
-padding:120px 20px 100px 20px;
-text-align:center;
+max-width:1100px;
+margin:40px auto 20px auto;
+padding:0 20px;
 }
 
-.hero h1{
-font-size:42px;
-margin:0;
-}
-
-.hero p{
-color:#c9ccff;
-margin-top:10px;
-font-size:18px;
+.hero img{
+width:100%;
+height:auto;
+display:block;
+border-radius:16px;
+box-shadow:0 30px 60px rgba(0,0,0,0.5);
 }
 
 /* CONTAINER */
@@ -41,17 +36,17 @@ font-size:18px;
 .container{
 max-width:950px;
 margin:auto;
-padding:40px 20px;
+padding:20px;
 }
 
 /* GLASS CARD */
 
 .card{
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(16px);
-border-radius:14px;
+background:rgba(255,255,255,0.07);
+backdrop-filter:blur(20px);
+border-radius:16px;
 padding:30px;
-box-shadow:0 20px 50px rgba(0,0,0,0.4);
+box-shadow:0 30px 70px rgba(0,0,0,0.5);
 }
 
 /* API KEY */
@@ -62,7 +57,7 @@ margin-bottom:20px;
 
 .api-key input{
 width:100%;
-padding:12px;
+padding:14px;
 border-radius:8px;
 border:none;
 font-size:15px;
@@ -79,7 +74,7 @@ flex-wrap:wrap;
 
 .tool-selector button{
 flex:1;
-padding:10px;
+padding:12px;
 border:none;
 border-radius:8px;
 background:#2a2f55;
@@ -151,12 +146,6 @@ cursor:pointer;
 font-size:12px;
 }
 
-/* LOADING */
-
-.loading{
-opacity:0.6;
-}
-
 /* FOOTER */
 
 .footer{
@@ -166,21 +155,27 @@ color:#8c90ff;
 font-size:14px;
 }
 
+/* LOADING */
+
+.loading{
+opacity:0.6;
+}
+
 </style>
 
 </head>
 
 <body>
 
+
+<!-- HERO IMAGE -->
+
 <div class="hero">
-
-<h1>AI Social Media Toolkit</h1>
-
-<p>
-Turn one piece of content into multiple social media assets instantly.
-</p>
-
+<img src="hero.png" alt="AI Social Media Toolkit">
 </div>
+
+
+<!-- TOOL AREA -->
 
 <div class="container">
 
@@ -215,6 +210,7 @@ Powered by DadStrength AI
 
 </div>
 
+
 <script>
 
 let tool = "repurpose"
@@ -231,7 +227,8 @@ document.getElementById(selected).classList.add("active")
 
 }
 
-/* COPY BUTTON */
+
+/* COPY RESULT */
 
 function copyResult(){
 
@@ -240,6 +237,7 @@ const text = document.getElementById("result").innerText
 navigator.clipboard.writeText(text)
 
 }
+
 
 /* GENERATE */
 
