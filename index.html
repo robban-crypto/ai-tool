@@ -1,408 +1,360 @@
 <!DOCTYPE html>
-<html>
+<html lang="sv">
 <head>
+    <title>FlowForge AI Toolkit</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-<title>FlowForge AI Toolkit</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            background: #0f1221;
+            color: white;
+            line-height: 1.6;
+        }
 
-<style>
+        /* HERO */
+        .hero {
+            max-width: 1100px;
+            margin: 20px auto 10px auto;
+            padding: 0 20px;
+        }
 
-*{
-box-sizing:border-box;
-}
+        .hero img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
 
-body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-margin:0;
-background:#0f1221;
-color:white;
-}
+        /* CONTAINER */
+        .container {
+            max-width: 950px;
+            margin: auto;
+            padding: 20px;
+        }
 
-/* HERO */
+        /* TOOL CARD */
+        .card {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+            margin-top: -40px;
+        }
 
-.hero{
-max-width:1100px;
-margin:20px auto 10px auto;
-padding:0 20px;
-}
+        /* INPUT */
+        .api-key input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            margin-bottom: 20px;
+            background: white;
+        }
 
-.hero img{
-width:100%;
-height:auto;
-display:block;
-border-radius:16px;
-box-shadow:0 30px 60px rgba(0,0,0,0.5);
-}
+        /* TOOL SELECTOR */
+        .tool-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
 
-/* CONTAINER */
+        .tool-selector button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2a2f55;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
 
-.container{
-max-width:950px;
-margin:auto;
-padding:20px;
-}
+        .tool-selector button.active {
+            background: #5a67ff;
+        }
 
-/* TOOL CARD */
+        /* TEXTAREA */
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            resize: vertical;
+            font-size: 15px;
+        }
 
-.card{
-background:rgba(255,255,255,0.07);
-backdrop-filter:blur(20px);
-border-radius:16px;
-padding:30px;
-box-shadow:0 30px 70px rgba(0,0,0,0.5);
-margin-top:-40px;
-}
+        /* GENERATE BUTTON */
+        .generate-btn {
+            margin-top: 15px;
+            padding: 14px;
+            width: 100%;
+            background: #5a67ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
 
-/* INPUT */
+        /* RESULT AREA - UPDATED FOR MARKDOWN */
+        .result {
+            margin-top: 30px;
+            background: #11142a;
+            padding: 25px;
+            border-radius: 8px;
+            min-height: 120px;
+            white-space: pre-wrap; /* Behålls under skrivning */
+        }
 
-.api-key input{
-width:100%;
-padding:14px;
-border-radius:8px;
-border:none;
-font-size:15px;
-margin-bottom:20px;
-}
+        /* Markdown Styling in Result */
+        .result h3 {
+            color: #5a67ff;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
 
-/* TOOL SELECTOR */
+        .result strong {
+            color: #8c90ff;
+        }
 
-.tool-selector{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-flex-wrap:wrap;
-}
+        .result hr {
+            border: none;
+            border-top: 2px dashed rgba(255,255,255,0.1);
+            margin: 25px 0;
+        }
 
-.tool-selector button{
-flex:1;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#2a2f55;
-color:white;
-cursor:pointer;
-font-weight:600;
-}
+        .credits-box {
+            background: rgba(90, 103, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(90, 103, 255, 0.3);
+            margin-top: 20px;
+            font-size: 14px;
+        }
 
-.tool-selector button.active{
-background:#5a67ff;
-}
+        /* ACTION BUTTONS */
+        .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
 
-/* TEXTAREA */
+        .actions button {
+            background: #5a67ff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-textarea{
-width:100%;
-height:180px;
-padding:14px;
-border-radius:8px;
-border:none;
-resize:vertical;
-font-size:15px;
-}
+        .actions button.copied {
+            background: #2ecc71;
+        }
 
-/* GENERATE BUTTON */
+        /* LOADER */
+        .loader {
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #5a67ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
 
-.generate-btn{
-margin-top:15px;
-padding:14px;
-width:100%;
-background:#5a67ff;
-color:white;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-font-weight:600;
-}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-/* RESULT */
-
-.result{
-margin-top:30px;
-background:#11142a;
-padding:20px;
-border-radius:8px;
-white-space:pre-wrap;
-min-height:120px;
-font-family:monospace;
-}
-
-/* ACTION BUTTONS */
-
-.actions{
-margin-top:10px;
-display:flex;
-gap:10px;
-}
-
-.actions button{
-background:#5a67ff;
-border:none;
-padding:10px 16px;
-border-radius:8px;
-color:white;
-cursor:pointer;
-font-size:14px;
-font-weight:600;
-}
-
-.actions button.copied{
-background:#2ecc71;
-}
-
-/* LOADER */
-
-.loader{
-border:4px solid rgba(255,255,255,0.1);
-border-top:4px solid #5a67ff;
-border-radius:50%;
-width:40px;
-height:40px;
-animation:spin 1s linear infinite;
-margin:40px auto;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-/* FOOTER */
-
-.footer{
-margin-top:40px;
-text-align:center;
-color:#8c90ff;
-font-size:14px;
-}
-
-</style>
-
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #8c90ff;
+            font-size: 14px;
+            padding-bottom: 40px;
+        }
+    </style>
 </head>
-
 <body>
 
-
-<div class="hero">
-<img src="hero.png" alt="FlowForge AI Toolkit">
-</div>
-
-
-<div class="container">
-
-<div class="card">
-
-<div class="api-key">
-<input id="apikey" type="password" placeholder="Enter your API key">
-</div>
-
-<div class="tool-selector">
-
-<button onclick="setTool('repurpose')" class="active" id="repurpose">Repurpose</button>
-<button onclick="setTool('hooks')" id="hooks">Hook Generator</button>
-<button onclick="setTool('thread')" id="thread">Thread Writer</button>
-<button onclick="setTool('newsletter')" id="newsletter">Newsletter</button>
-
-</div>
-
-<textarea id="content" placeholder="Paste your content here..."></textarea>
-
-<button class="generate-btn" onclick="generate()">Generate</button>
-
-<div class="result" id="result"></div>
-
-<div class="actions">
-<button onclick="copyResult()">Copy</button>
-<button onclick="downloadResult()">Download</button>
-</div>
-
-</div>
-
-<div class="footer">
-FlowForge AI
-</div>
-
-</div>
-
-
-<script>
-
-let tool="repurpose"
-
-
-function setTool(selected){
-
-tool=selected
-
-document.querySelectorAll(".tool-selector button").forEach(b=>{
-b.classList.remove("active")
-})
-
-document.getElementById(selected).classList.add("active")
-
-}
-
-
-/* COPY */
-
-function copyResult(){
-
-const text=document.getElementById("result").innerText
-
-navigator.clipboard.writeText(text)
-
-const btn=document.querySelector(".actions button")
-
-btn.innerText="Copied ✓"
-btn.classList.add("copied")
-
-setTimeout(()=>{
-btn.innerText="Copy"
-btn.classList.remove("copied")
-},2000)
-
-}
-
-
-/* DOWNLOAD */
-
-function downloadResult(){
-
-const text=document.getElementById("result").innerText
-
-const blob=new Blob([text],{type:"text/plain"})
-
-const url=URL.createObjectURL(blob)
-
-const a=document.createElement("a")
-
-a.href=url
-a.download="flowforge-output.txt"
-
-document.body.appendChild(a)
-
-a.click()
-
-a.remove()
-
-URL.revokeObjectURL(url)
-
-}
-
-
-/* TYPEWRITER */
-
-function typeWriter(text){
-
-const result=document.getElementById("result")
-
-result.innerText=""
-
-let i=0
-
-function typing(){
-
-if(i<text.length){
-
-result.innerText+=text.charAt(i)
-
-i++
-
-window.scrollTo(0,document.body.scrollHeight)
-
-setTimeout(typing,8)
-
-}
-
-}
-
-typing()
-
-}
-
-
-/* GENERATE */
-
-async function generate(){
-
-const content=document.getElementById("content").value
-const apikey=document.getElementById("apikey").value
-const result=document.getElementById("result")
-
-if(!apikey){
-result.innerText="Enter API key"
-return
-}
-
-if(!content){
-result.innerText="Enter content"
-return
-}
-
-result.innerHTML='<div class="loader"></div>'
-
-try{
-
-const response=await fetch("https://api.flowforgeai.app/webhook/generate",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-content:content,
-tool:tool,
-apikey:apikey
-})
-
-})
-
-const data=await response.text()
-
-typeWriter(data)
-
-setTimeout(()=>{
-
-window.scrollTo({
-top:document.body.scrollHeight,
-behavior:"smooth"
-})
-
-},200)
-
-}catch(err){
-
-result.innerText="Connection error"
-
-}
-
-}
-
-
-/* ENTER TO GENERATE */
-
-document.addEventListener("keydown",function(e){
-
-if(e.key==="Enter" && !e.shiftKey){
-
-const textarea=document.getElementById("content")
-
-if(document.activeElement===textarea){
-
-e.preventDefault()
-
-generate()
-
-}
-
-}
-
-})
-
-</script>
-
+    <div class="hero">
+        <img src="hero.png" alt="FlowForge AI Toolkit">
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="api-key">
+                <input id="apikey" type="password" placeholder="Enter your API key">
+            </div>
+
+            <div class="tool-selector">
+                <button onclick="setTool('repurpose')" class="active" id="repurpose">Repurpose</button>
+                <button onclick="setTool('hooks')" id="hooks">Hook Generator</button>
+                <button onclick="setTool('thread')" id="thread">Thread Writer</button>
+                <button onclick="setTool('newsletter')" id="newsletter">Newsletter</button>
+            </div>
+
+            <textarea id="content" placeholder="Paste your content here..."></textarea>
+            <button class="generate-btn" onclick="generate()">Generate Content</button>
+
+            <div class="result" id="result">Resultat visas här...</div>
+
+            <div class="actions">
+                <button onclick="copyResult()">Copy</button>
+                <button onclick="downloadResult()">Download</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            FlowForge AI Toolkit • 2024
+        </div>
+    </div>
+
+    <script>
+        let tool = "repurpose";
+
+        function setTool(selected) {
+            tool = selected;
+            document.querySelectorAll(".tool-selector button").forEach(b => {
+                b.classList.remove("active");
+            });
+            document.getElementById(selected).classList.add("active");
+        }
+
+        function copyResult() {
+            const resultDiv = document.getElementById("result");
+            // Vi använder innerText för att kopiera den rena texten utan HTML-taggar
+            const text = resultDiv.innerText;
+            navigator.clipboard.writeText(text);
+
+            const btn = document.querySelector(".actions button");
+            btn.innerText = "Copied ✓";
+            btn.classList.add("copied");
+
+            setTimeout(() => {
+                btn.innerText = "Copy";
+                btn.classList.remove("copied");
+            }, 2000);
+        }
+
+        function downloadResult() {
+            const text = document.getElementById("result").innerText;
+            const blob = new Blob([text], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "flowforge-output.txt";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        /* NY UPPDATERAD TYPEWRITER */
+        function typeWriter(text) {
+            const result = document.getElementById("result");
+            result.innerHTML = "";
+            result.style.whiteSpace = "pre-wrap"; 
+            
+            let i = 0;
+            const speed = 5; // Millisekunder per tecken
+
+            function typing() {
+                if (i < text.length) {
+                    result.innerText += text.charAt(i);
+                    i++;
+                    // Scrolla ner automatiskt medan det skrivs
+                    if (i % 10 === 0) window.scrollTo(0, document.body.scrollHeight);
+                    setTimeout(typing, speed);
+                } else {
+                    // NÄR TEXTEN ÄR KLAR: Rendera Markdown
+                    result.style.whiteSpace = "normal"; 
+                    
+                    // Dela vid ditt n8n-separator '---'
+                    const parts = text.split('---');
+                    
+                    // Konvertera första delen (AI-svar)
+                    let finalHTML = marked.parse(parts[0]);
+                    
+                    // Om det finns en credits-del, lägg den i en snygg box
+                    if (parts[1]) {
+                        finalHTML += `<div class="credits-box">${marked.parse(parts[1])}</div>`;
+                    }
+                    
+                    result.innerHTML = finalHTML;
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                }
+            }
+            typing();
+        }
+
+        async function generate() {
+            const content = document.getElementById("content").value;
+            const apikey = document.getElementById("apikey").value;
+            const result = document.getElementById("result");
+
+            if (!apikey) { result.innerText = "Enter API key"; return; }
+            if (!content) { result.innerText = "Enter content"; return; }
+
+            result.innerHTML = '<div class="loader"></div>';
+
+            try {
+                const response = await fetch("https://api.flowforgeai.app/webhook/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        content: content,
+                        tool: tool,
+                        apikey: apikey
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    result.innerText = "Error: " + errorData;
+                    return;
+                }
+
+                const data = await response.text();
+                typeWriter(data);
+
+            } catch (err) {
+                result.innerText = "Connection error. Check your VPS status.";
+            }
+        }
+
+        /* ENTER TO GENERATE */
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                const textarea = document.getElementById("content");
+                if (document.activeElement === textarea) {
+                    e.preventDefault();
+                    generate();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
