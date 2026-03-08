@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
     <title>FlowForge AI Toolkit</title>
     <meta charset="UTF-8">
@@ -61,6 +61,7 @@
             font-size: 15px;
             margin-bottom: 20px;
             background: white;
+            color: black;
         }
 
         /* TOOL SELECTOR */
@@ -96,6 +97,8 @@
             border: none;
             resize: vertical;
             font-size: 15px;
+            background: white;
+            color: black;
         }
 
         /* GENERATE BUTTON */
@@ -112,14 +115,14 @@
             font-weight: 600;
         }
 
-        /* RESULT AREA - UPDATED FOR MARKDOWN */
+        /* RESULT AREA */
         .result {
             margin-top: 30px;
             background: #11142a;
             padding: 25px;
             border-radius: 8px;
             min-height: 120px;
-            white-space: pre-wrap; /* Behålls under skrivning */
+            white-space: pre-wrap; 
         }
 
         /* Markdown Styling in Result */
@@ -129,6 +132,7 @@
             margin-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 5px;
+            font-family: sans-serif;
         }
 
         .result strong {
@@ -148,6 +152,8 @@
             border: 1px solid rgba(90, 103, 255, 0.3);
             margin-top: 20px;
             font-size: 14px;
+            font-family: sans-serif;
+            color: #8c90ff;
         }
 
         /* ACTION BUTTONS */
@@ -219,7 +225,7 @@
             <textarea id="content" placeholder="Paste your content here..."></textarea>
             <button class="generate-btn" onclick="generate()">Generate Content</button>
 
-            <div class="result" id="result">Resultat visas här...</div>
+            <div class="result" id="result">The result will appear here...</div>
 
             <div class="actions">
                 <button onclick="copyResult()">Copy</button>
@@ -228,7 +234,7 @@
         </div>
 
         <div class="footer">
-            FlowForge AI Toolkit • 2024
+            FlowForge AI Toolkit • 2026
         </div>
     </div>
 
@@ -245,7 +251,6 @@
 
         function copyResult() {
             const resultDiv = document.getElementById("result");
-            // Vi använder innerText för att kopiera den rena texten utan HTML-taggar
             const text = resultDiv.innerText;
             navigator.clipboard.writeText(text);
 
@@ -272,35 +277,42 @@
             URL.revokeObjectURL(url);
         }
 
-        /* NY UPPDATERAD TYPEWRITER */
+        /* UPDATED TYPEWRITER - PREVENTS CLIPPING */
         function typeWriter(text) {
             const result = document.getElementById("result");
             result.innerHTML = "";
             result.style.whiteSpace = "pre-wrap"; 
             
             let i = 0;
-            const speed = 5; // Millisekunder per tecken
+            const speed = 2; 
 
             function typing() {
                 if (i < text.length) {
                     result.innerText += text.charAt(i);
                     i++;
-                    // Scrolla ner automatiskt medan det skrivs
-                    if (i % 10 === 0) window.scrollTo(0, document.body.scrollHeight);
+                    if (i % 5 === 0) window.scrollTo(0, document.body.scrollHeight);
                     setTimeout(typing, speed);
                 } else {
-                    // NÄR TEXTEN ÄR KLAR: Rendera Markdown
+                    // RENDERING AFTER TYPING IS COMPLETE
                     result.style.whiteSpace = "normal"; 
                     
-                    // Dela vid ditt n8n-separator '---'
-                    const parts = text.split('---');
+                    // Look for the LAST occurrence of the separator to split credits
+                    const lastIndex = text.lastIndexOf('---');
                     
-                    // Konvertera första delen (AI-svar)
-                    let finalHTML = marked.parse(parts[0]);
+                    let contentPart = text;
+                    let creditsPart = "";
+
+                    if (lastIndex !== -1) {
+                        contentPart = text.substring(0, lastIndex);
+                        creditsPart = text.substring(lastIndex + 3); 
+                    }
                     
-                    // Om det finns en credits-del, lägg den i en snygg box
-                    if (parts[1]) {
-                        finalHTML += `<div class="credits-box">${marked.parse(parts[1])}</div>`;
+                    // Parse content as Markdown
+                    let finalHTML = marked.parse(contentPart);
+                    
+                    // Add credits box if found
+                    if (creditsPart.trim().length > 0) {
+                        finalHTML += `<div class="credits-box">${marked.parse(creditsPart)}</div>`;
                     }
                     
                     result.innerHTML = finalHTML;
@@ -332,8 +344,8 @@
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.text();
-                    result.innerText = "Error: " + errorData;
+                    const errorText = await response.text();
+                    result.innerText = "Error: " + errorText;
                     return;
                 }
 
@@ -341,7 +353,7 @@
                 typeWriter(data);
 
             } catch (err) {
-                result.innerText = "Connection error. Check your VPS status.";
+                result.innerText = "Connection error. Please check your VPS/Webhook.";
             }
         }
 
