@@ -122,38 +122,44 @@
             padding: 25px;
             border-radius: 8px;
             min-height: 120px;
-            white-space: pre-wrap; 
         }
 
-        /* Markdown Styling in Result */
+        /* Markdown Styling inside Result */
         .result h3 {
             color: #5a67ff;
-            margin-top: 25px;
-            margin-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
+            padding-bottom: 8px;
             font-family: sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .result strong {
             color: #8c90ff;
         }
 
+        .result p {
+            margin-bottom: 15px;
+            white-space: pre-wrap; /* Behåller radbrytningar från AI:n */
+        }
+
         .result hr {
             border: none;
-            border-top: 2px dashed rgba(255,255,255,0.1);
-            margin: 25px 0;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            margin: 30px 0;
         }
 
         .credits-box {
             background: rgba(90, 103, 255, 0.1);
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
             border: 1px solid rgba(90, 103, 255, 0.3);
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
-            font-family: sans-serif;
             color: #8c90ff;
+            text-align: center;
         }
 
         /* ACTION BUTTONS */
@@ -277,10 +283,11 @@
             URL.revokeObjectURL(url);
         }
 
-        /* UPDATED TYPEWRITER - PREVENTS CLIPPING */
         function typeWriter(text) {
             const result = document.getElementById("result");
             result.innerHTML = "";
+            
+            // Temporary pre-wrap style during typing to keep spaces
             result.style.whiteSpace = "pre-wrap"; 
             
             let i = 0;
@@ -293,10 +300,7 @@
                     if (i % 5 === 0) window.scrollTo(0, document.body.scrollHeight);
                     setTimeout(typing, speed);
                 } else {
-                    // RENDERING AFTER TYPING IS COMPLETE
-                    result.style.whiteSpace = "normal"; 
-                    
-                    // Look for the LAST occurrence of the separator to split credits
+                    // Final formatting
                     const lastIndex = text.lastIndexOf('---');
                     
                     let contentPart = text;
@@ -307,10 +311,8 @@
                         creditsPart = text.substring(lastIndex + 3); 
                     }
                     
-                    // Parse content as Markdown
                     let finalHTML = marked.parse(contentPart);
                     
-                    // Add credits box if found
                     if (creditsPart.trim().length > 0) {
                         finalHTML += `<div class="credits-box">${marked.parse(creditsPart)}</div>`;
                     }
@@ -353,11 +355,10 @@
                 typeWriter(data);
 
             } catch (err) {
-                result.innerText = "Connection error. Please check your VPS/Webhook.";
+                result.innerText = "Connection error. Please check your Webhook URL.";
             }
         }
 
-        /* ENTER TO GENERATE */
         document.addEventListener("keydown", function(e) {
             if (e.key === "Enter" && !e.shiftKey) {
                 const textarea = document.getElementById("content");
